@@ -48,13 +48,9 @@ class LessonAdapter : Adapter<LessonViewHolder>() {
   ) {
     fun onBind(lesson: Lesson) {
       var date = lesson.date
-      if (date == null) {
-        date = "日期待定"
-      }
       setText(id.tv_date, date)
       setText(id.tv_content, lesson.content)
-      val state = lesson.state
-      if (state != null) {
+      lesson.state.let { state: Lesson.State ->
         setText(id.tv_state, state.stateName())
         var colorRes = color.playback
         colorRes = when (state) {
@@ -69,6 +65,7 @@ class LessonAdapter : Adapter<LessonViewHolder>() {
         val backgroundColor = itemView.context
             .getColor(colorRes)
         getView<View>(id.tv_state)!!.setBackgroundColor(backgroundColor)
+
       }
     }
 

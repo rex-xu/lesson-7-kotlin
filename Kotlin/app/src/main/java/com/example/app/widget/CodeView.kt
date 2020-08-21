@@ -13,29 +13,28 @@ import com.example.app.R
 import com.example.core.utils.Utils
 import java.util.Random
 
-class CodeView : AppCompatTextView {
-  constructor(context: Context) : this(context, null) {
-
-  }
+class CodeView(
+  context: Context,
+  attrs: AttributeSet?
+) : AppCompatTextView(context, attrs) {
 
   constructor(
-    context: Context,
-    attrs: AttributeSet?
-  ) : super(context, attrs) {
+    context: Context
+  ) : this(context, null) {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
     gravity = Gravity.CENTER
     setBackgroundColor(getContext().getColor(R.color.colorPrimary))
     setTextColor(Color.WHITE)
 
-    paint.isAntiAlias = true
-    paint.style = STROKE
-    paint.color = getContext().getColor(R.color.colorAccent)
-    paint.strokeWidth = Utils.dp2px(6f)
-
     updateCode()
   }
 
-  private var paint = Paint()
+  private var paint = Paint().apply {
+    isAntiAlias = true
+    style = STROKE
+    color = getContext().getColor(R.color.colorAccent)
+    strokeWidth = Utils.dp2px(6f)
+  }
 
   private var codeList = arrayOf(
       "kotlin",
@@ -49,10 +48,7 @@ class CodeView : AppCompatTextView {
   )
 
   fun updateCode() {
-    val random = Random()
-        .nextInt(codeList.size)
-    val code = codeList[random]
-    text = code
+    text = codeList[Random().nextInt(codeList.size)]
   }
 
   override fun onDraw(canvas: Canvas) {

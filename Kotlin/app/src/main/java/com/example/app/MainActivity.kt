@@ -34,10 +34,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     et_username.setText(CacheUtils.get(usernameKey))
     et_password.setText(CacheUtils.get(passwordKey))
 
-    val btn_login = findViewById<Button>(id.btn_login)
-    val img_code = findViewById<CodeView>(id.code_view)
-    btn_login.setOnClickListener(this)
-    img_code.setOnClickListener(this)
+    val btnLogin = findViewById<Button>(id.btn_login).run {
+      setOnClickListener(this@MainActivity)
+    }
+    val img_code = findViewById<CodeView>(id.code_view).run {
+      setOnClickListener(this@MainActivity)
+    }
 
   }
 

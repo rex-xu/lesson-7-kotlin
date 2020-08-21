@@ -30,24 +30,11 @@ class HttpClient private constructor() : OkHttpClient() {
         call: Call,
         response: Response
       ) {
-        val code = response.code()
-        if (code in 200..299) {
-          val body = response.body()
-          var json: String? = null
-          try {
-            json = body!!.string()
-          } catch (e: IOException) {
-            e.printStackTrace()
-          }
-          entityCallback.onSuccess(
-              convert<Any>(json, type) as T
-          )
-        } else if (code in 400..499) {
-          entityCallback.onFailure("客户端错误")
-        } else if (code in 500..599) {
-          entityCallback.onFailure("服务器错误")
-        } else {
-          entityCallback.onFailure("未知错误")
+        when (response.code()) {
+          in 200..299 -> entityCallback.onSuccess(convert<Any>(response.body()!!.string(), type) as T)
+          in 400..499 ->  entityCallback.onFailure("客户端错误")
+          in 500..599 ->  entityCallback.onFailure("服务器错误")
+          else -> entityCallback.onFailure("未知错误")
         }
       }
     })
